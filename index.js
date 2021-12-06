@@ -33,14 +33,16 @@ const { MessageEmbed } = require('discord.js')
 let idk = await fetch(`https://api.leref.ga/npm?search=${message.content.replace('^npm', '')}`).then(x => x.json())
 let embed = new MessageEmbed ()
 .setTitle(`${idk.name}`)
+.setURL(`${idk.npm}`)
 .setDescription(`
 \`\`\`
 npm install ${idk.name}
 \`\`\`
+${idk.description}
 `)
 .addFields(
 {name: '**Name**', value: `${idk.name}`},
-{name: '**Description:**', value: `${idk.description}`},
+/*{name: '**Description:**', value: `${idk.description}`},*/
 {name: '**Version:**', value: `${idk.version}`},
 {name: '**Publisher:**', value: `${idk.publisher}`},
 {name: '**Link:**', value: `${idk.npm}`}
