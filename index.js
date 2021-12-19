@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const intents = ['GUILDS', 'GUILD_MEMBERS'];
 const client = new Discord.Client();
 
-//vars
+//variables
 const owners = [
 	'670249406527963147',
   '513707147213799436',
