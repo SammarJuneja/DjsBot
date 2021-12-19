@@ -10,10 +10,15 @@
     "discord-canvas": "^1.4.1",
     "discord.js": "^12.5.3",
     "express": "^4.17.1",
+    "fs-extra": "^10.0.0",
+    "ms": "^2.1.3",
     "nanoid": "^3.1.30",
     "node-fetch": "^2.0.0",
     "ping-monitor": "^0.6.2",
-    "quick.db": "^7.1.3"
+    "pretty-ms": "^7.0.1",
+    "quick.db": "^7.1.3",
+    "ytdl": "^1.4.1",
+    "ytdl-core": "^4.9.1"
   },
   "devDependencies": {},
   "scripts": {
