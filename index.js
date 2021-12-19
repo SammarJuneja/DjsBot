@@ -1,7 +1,5 @@
 const Discord = require('discord.js');
 const intents = ['GUILDS', 'GUILD_MEMBERS'];
-/*const fetch = require('node-fetch');
-const db = require('quick.db');*/
 const client = new Discord.Client();
 
 //vars
@@ -26,7 +24,6 @@ const frnd = [
 	'548419804147613717',
 	'607097982260740096'
 ];
-//const nRes = (async() => { await fetch(`https://api.leref.ga/npm?search=${message.content}`) })()
 
 client.once('ready', () => {
 	console.log('Ready!');
