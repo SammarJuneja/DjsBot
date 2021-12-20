@@ -321,19 +321,6 @@ member.guild.channels.cache.get('886627895315943445').send(bdfd);
 
 client.login(process.env.TOKEN);
 
-const keepAlive = require('./server');
-const Monitor = require('ping-monitor');
-
-keepAlive();
-const monitor = new Monitor({
-	website: '',
-	title: 'NAME',
-	interval: 2
-});
-
-monitor.on('up', res => console.log(`${res.website} its on.`));
-monitor.on('down', res =>
-	console.log(`${res.website} it has died - ${res.statusMessage}`)
-);
-monitor.on('stop', website => console.log(`${website} has stopped.`));
-monitor.on('error', error => console.log(error));
+const keepAlive = require('keep-alive')
+keepAlive.add('REPL URL', 50000)
+// pings the repl every 5 minutes
