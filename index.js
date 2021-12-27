@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const intents = ['GUILDS', 'GUILD_MEMBERS'];
+const {Permissions} = require('discord.js');
 const client = new Discord.Client();
 
 //variables
@@ -37,7 +38,10 @@ try {
 let t = message.content.replace('^eval', '').trim();
 let x = require('util').inspect(await eval(t), { depth: 0 });
 const { MessageEmbed } = require('discord.js');
-let embed = new MessageEmbed().setTitle('Eval').setColor('BLUE')
+let embed = new MessageEmbed()
+.setTitle('Eval')
+.setURL('https://github.com/Wils0n-op/Djs-bot')
+.setColor('BLUE')
 .setDescription(`
 **Input:**
 \`\`\`js
@@ -54,6 +58,7 @@ let brr = message.content.replace('^eval', '').trim();
 let { MessageEmbed } = require('discord.js');
 let err = new MessageEmbed()
 .setColor('RED')
+.setURL('https://github.com/Wils0n-op/Djs-bot')
 .setDescription(`
 **Input:**
 \`\`\`js
@@ -96,6 +101,9 @@ message.channel.send({ content: `||npm install ${idk.name}||`, embed: embed});
 })();
 }
 } else if (message.content.startsWith('^change')) {
+if (message.member.permissions.has(Permissions.FLAGS.MANAGE_NICKNAMES) === false) {
+message.channel.send('You are missing \`manage_nickname\` permission')
+} else {
 let { MessageEmbed } = require('discord.js');
 let nah = message.mentions.users.first();
 let text = message.content;
@@ -110,6 +118,7 @@ embed.setThumbnail(nah.displayAvatarURL());
 embed.setFooter(`Command used by ${message.author.tag}`, message.author.displayAvatarURL());
 message.channel.send(embed);
 hi.setNickname(ok);
+}
 } else if (message.content.startsWith('^whitelist')) {
 let ew = message.content.replace('^whitelist', '');
 frnd.push(`${message.content.replace('^whitelist', '').trim()}`);
@@ -147,7 +156,7 @@ let embed = new MessageEmbed()
 .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
 .setTimestamp()
 message.channel.send(embed)
-db.add(`bank-server-${message.guild.id}-user-${message.author.id}`, random)
+db.add(`money-server-${message.guild.id}-user-${message.author.id}`, random)
 }  else if (message.content.startsWith('^with')) {
 if (Number(message.content.replace('^with', ''))) {
 const db = require('quick.db')
@@ -181,18 +190,17 @@ let embdd = new MessageEmbed()
 message.channel.send(embdd)
 }
 } else if (message.content.startsWith('^bal')) {
-if (Number.isInteger(`${message.content.replace('^bal', '')}`) === false) {
+if (Number(`${message.content.replace('^bal', '').trim()}`)) {
 try {
 const umm = message.client.users.cache.get(`${message.content.replace('^bal', '').trim()}`)
 const db = require('quick.db')
 const {MessageEmbed} = require('discord.js')
 const emb = new MessageEmbed()
-//.setAuthor(umm.tag)
+.setAuthor(umm.tag)
 .setColor('#c52222')
-.setDescription('Master')
 .addFields(
-{name: '**Money**', value: db.get(`money-server-${message.guild.id}-user-${umm.id}`)},
-{name: '**Bank**', value: db.get(`bank-server-${message.guild.id}-user-${umm.id}`)},
+{name: '**Money**', value: db.get(`money-server-${message.guild.id}-user-${umm.id}`) + 0},
+{name: '**Bank**', value: db.get(`bank-server-${message.guild.id}-user-${umm.id}`) + 0},
 {name: '**Total**', value: db.get(`money-server-${message.guild.id}-user-${umm.id}`) + db.get(`bank-server-${message.guild.id}-user-${umm.id}`)}
 )
 .setTimestamp()
@@ -209,10 +217,9 @@ const {MessageEmbed} = require('discord.js')
 const emb = new MessageEmbed()
 .setAuthor(`${mentioned.tag}`)
 .setColor('#c52222')
-.setDescription('Master')
 .addFields(
-{name: '**Money**', value: db.get(`money-server-${message.guild.id}-user-${mentioned.id}`)},
-{name: '**Bank**', value: db.get(`bank-server-${message.guild.id}-user-${mentioned.id}`)},
+{name: '**Money**', value: db.get(`money-server-${message.guild.id}-user-${mentioned.id}`) + 0},
+{name: '**Bank**', value: db.get(`bank-server-${message.guild.id}-user-${mentioned.id}`) + 0},
 {name: '**Total**', value: db.get(`money-server-${message.guild.id}-user-${mentioned.id}`) + db.get(`bank-server-${message.guild.id}-user-${mentioned.id}`)}
 )
 .setTimestamp()
@@ -225,10 +232,9 @@ const {MessageEmbed} = require('discord.js')
 const emb = new MessageEmbed()
 .setAuthor(`${message.author.tag}`)
 .setColor('#c52222')
-.setDescription('Master')
 .addFields(
-{name: '**Money**', value: db.get(`money-server-${message.guild.id}-user-${message.author.id}`)},
-{name: '**Bank**', value: db.get(`bank-server-${message.guild.id}-user-${message.author.id}`)},
+{name: '**Money**', value: db.get(`money-server-${message.guild.id}-user-${message.author.id}`) + 0},
+{name: '**Bank**', value: db.get(`bank-server-${message.guild.id}-user-${message.author.id}`) + 0},
 {name: '**Total**', value: db.get(`money-server-${message.guild.id}-user-${message.author.id}`) + db.get(`bank-server-${message.guild.id}-user-${message.author.id}`)}
 )
 .setTimestamp()
@@ -236,6 +242,72 @@ const emb = new MessageEmbed()
 .setThumbnail(message.author.displayAvatarURL())
 message.channel.send(emb)
 } 
+} else if (message.content.startsWith('^dep')) {
+if (Number(message.content.replace('^dep', ''))) {
+const db = require('quick.db')
+let kk = db.get(`money-server-${message.guild.id}-user-${message.author.id}`)
+if (Number(message.content.replace('^dep', '')) > kk) {
+let {MessageEmbed} = require('discord.js')
+let embdd = new MessageEmbed()
+.setDescription(`You don't have enough money to deposit`)
+.setColor('#c52222')
+.setFooter(`${message.author.tag}`, message.author.displayAvatarURL())
+.setTimestamp()
+message.channel.send(embdd)
+} else {
+let {MessageEmbed} = require('discord.js')
+let embdd = new MessageEmbed()
+.setDescription(`You deposit ${Number(message.content.replace('^dep', ''))} successfully`)
+.setColor('#c52222')
+.setFooter(`${message.author.tag}`, message.author.displayAvatarURL())
+.setTimestamp()
+message.channel.send(embdd)
+db.subtract(`money-server-${message.guild.id}-user-${message.author.id}`, Number(message.content.replace('^dep', '')))
+db.add(`bank-server-${message.guild.id}-user-${message.author.id}`, Number(message.content.replace('^dep', '')))
+}
+} else {
+let {MessageEmbed} = require('discord.js')
+let embdd = new MessageEmbed()
+.setDescription('Please type a valid number to deposit')
+.setColor('#c52222')
+.setFooter(`${message.author.tag}`, message.author.displayAvatarURL())
+.setTimestamp()
+message.channel.send(embdd)
+}
+}  else if (message.content.startsWith('^rob')) {
+if (message.mentions.users.first()) {
+let db = require('quick.db')
+let mentioned = message.mentions.users.first()
+let bal = db.get(`money-server-${message.guild.id}-user-${mentioned.id}`)
+let random = Math.floor(Math.random() * bal)
+db.subtract(`money-server-${message.guild.id}-user-${mentioned.id}`, random)
+db.add(`money-server-${message.guild.id}-user-${message.author.id}`, random) 
+let {MessageEmbed} = require('discord.js')
+let embed = new MessageEmbed()
+.setDescription(`You robbed ${random} from ${mentioned.tag}`)
+.setColor('#c52222')
+.setTimestamp()
+.setAuthor(`${message.author.tag}`, message.author.displayAvatarURL())
+message.channel.send(embed)
+} else if (Number(message.content.replace('^rob', ''))) {
+try {
+let db = require('quick.db')
+let mentioned = message.client.users.cache.get(`${message.content.replace('^rob', '').trim()}`)
+let bal = db.get(`money-server-${message.guild.id}-user-${mentioned.id}`)
+let random = Math.floor(Math.random() * bal)
+db.subtract(`money-server-${message.guild.id}-user-${mentioned.id}`, random)
+db.add(`money-server-${message.guild.id}-user-${message.author.id}`, random) 
+let {MessageEmbed} = require('discord.js')
+let embed = new MessageEmbed()
+.setDescription(`You robbed ${random} from ${mentioned.tag}`)
+.setColor('#c52222')
+.setTimestamp()
+.setAuthor(`${message.author.tag}`, message.author.displayAvatarURL())
+message.channel.send(embed)
+} catch (error) {
+message.channel.send(error.message)
+}
+}
 }
 });
 
@@ -337,3 +409,4 @@ monitor.on('down', res =>
 );
 monitor.on('stop', website => console.log(`${website} has stopped.`));
 monitor.on('error', error => console.log(error));
+console.log('%cTest', 'color:green;')
