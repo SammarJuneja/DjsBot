@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const intents = ['GUILDS', 'GUILD_MEMBERS'];
 const {Permissions} = require('discord.js');
+const { prefix, token } = require('./config.json');
 const client = new Discord.Client();
 
 //variables
@@ -12,7 +13,7 @@ const owners = [
 	'696368083517964288'
 ];
 const wilson = ['wilson', 'wils0n'];
-const prefix = '^';
+//const prefix = '^';
 const frnd = [
 	'670249406527963147',
 	'754973435318501446',
@@ -31,9 +32,21 @@ client.once('ready', () => {
 });
 
 client.on('message', async message => {
-if (message.content === '^ping') {
+
+if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+const args = message.content.slice(prefix.length).trim().split(' ');
+const command = args.shift().toLowerCase();
+
+
+const user = args.length ? client.users.cache.find(x => x.username.startsWith(args)) || client.users.cache.get(args) || message.mentions.users.first() || await client.users.fetch(args) : message.author; 
+
+  
+
+if (command === 'ping') {
 message.channel.send(client.ws.ping)
-} else if (message.content.startsWith('^eval') && owners.includes(message.author.id)){
+} else if (message.content.startsWith('^eval')){
+if (owners.includes(message.author.id)) {
 try {
 let t = message.content.replace('^eval', '').trim();
 let x = require('util').inspect(await eval(t), { depth: 0 });
@@ -71,6 +84,9 @@ ${error.message}
 `)
 .setTitle('Error');
 message.channel.send(err);
+}
+} else {
+message.channel.send('You are gay')
 }
 } else if (message.content.startsWith('^npm')) {
 if (message.content.replace('^npm', '') === '') {
@@ -132,7 +148,7 @@ message.channel.send(eno);
 message.react('🇲');
 message.react('🇴');
 message.react('🇭');
-} else if (message.content.includes('WILSON')) {
+} else if (message.content.includes('wilson')) {
 let { MessageEmbed } = require('discord.js');
 let bil = new MessageEmbed()
 .setDescription(`
@@ -277,6 +293,17 @@ message.channel.send(embdd)
 }  else if (message.content.startsWith('^rob')) {
 if (message.mentions.users.first()) {
 let db = require('quick.db')
+let muser = message.mentions.users.first()
+let eror = db.get(`money-server-${message.guild.id}-user-${muser.id}`)
+if (eror <= 0) {
+let {MessageEmbed} = require('discord.js')
+let embed = new MessageEmbed()
+.setDescription(`${message.mentions.users.first()} don\'t have enough to rob`)
+.setColor('#c52222')
+.setTimestamp()
+message.channel.send(embed)
+} else {
+let db = require('quick.db')
 let mentioned = message.mentions.users.first()
 let bal = db.get(`money-server-${message.guild.id}-user-${mentioned.id}`)
 let random = Math.floor(Math.random() * bal)
@@ -289,7 +316,19 @@ let embed = new MessageEmbed()
 .setTimestamp()
 .setAuthor(`${message.author.tag}`, message.author.displayAvatarURL())
 message.channel.send(embed)
+}
 } else if (Number(message.content.replace('^rob', ''))) {
+let db = require('quick.db')
+let mentioned = message.client.users.cache.get(`${message.content.replace('^rob', '').trim()}`)
+let bal = db.get(`money-server-${message.guild.id}-user-${mentioned.id}`)
+if (bal <= 0) {
+let {MessageEmbed} = require('discord.js')
+let embed = new MessageEmbed()
+.setDescription(`${mentioned} don\'t have enough to rob`)
+.setColor('#c52222')
+.setTimestamp()
+message.channel.send(embed)
+} else {
 try {
 let db = require('quick.db')
 let mentioned = message.client.users.cache.get(`${message.content.replace('^rob', '').trim()}`)
@@ -308,6 +347,17 @@ message.channel.send(embed)
 message.channel.send(error.message)
 }
 }
+}
+} else if(command === 'av') {
+let {MessageEmbed} = require('discord.js')
+let embed = new MessageEmbed()
+.setImage(user.displayAvatarURL({size: 2048}))
+.setDescription(`[PNG](${user.displayAvatarURL({size: 2048, format: 'png'})}) | [JPG](${user.displayAvatarURL({size: 2048, format: 'jpg'})}) | [WEBP](${user.displayAvatarURL({size: 2048, format: 'webp'})}) | [GIF](${user.displayAvatarURL({size: 2048, format: 'gif'})})`)
+.setColor('#c52222')
+.setFooter(`Requested by ${message.author.tag}`)
+.setTimestamp()
+.setAuthor(user.tag)
+message.channel.send(embed) 
 }
 });
 
